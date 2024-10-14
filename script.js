@@ -55,9 +55,7 @@ function moveObstacle() {
     obstacle.style.top = obstacleY + 'px';
 }
 
-// 设置定时器让障碍物移动得更快
-setInterval(moveObstacle, 1000); // 每1秒障碍物随机移动一次
-}
+
 
 // 让小球跳跃
 function jump() {
@@ -107,7 +105,7 @@ document.addEventListener('touchstart', jump);
 
 // 设置定时器让小球和障碍物定期移动
 setInterval(moveBall, 50); // 小球每50毫秒移动一次
-setInterval(moveObstacle, 2000); // 每2秒障碍物随机移动一次
+setInterval(moveObstacle, 1000); // 每1秒障碍物随机移动一次
 
 
 
