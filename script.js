@@ -45,6 +45,7 @@ function moveBall() {
     checkCollision();
 }
 
+
 // 障碍物随机移动
 function moveObstacle() {
     // 随机生成障碍物的新位置
@@ -52,6 +53,10 @@ function moveObstacle() {
     obstacleY = Math.random() * (window.innerHeight - 50);
     obstacle.style.left = obstacleX + 'px';
     obstacle.style.top = obstacleY + 'px';
+}
+
+// 设置定时器让障碍物移动得更快
+setInterval(moveObstacle, 1000); // 每1秒障碍物随机移动一次
 }
 
 // 让小球跳跃
