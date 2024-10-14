@@ -24,8 +24,7 @@ body {
     background-color: red;
     border-radius: 50%;
     top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    left: 0;
 }
 
 #obstacle {
@@ -34,7 +33,7 @@ body {
     height: 50px;
     background-color: blue;
     top: 150px;
-    left: 150px;
+    left: 300px;
 }
 
 #lives {
