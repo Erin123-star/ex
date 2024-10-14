@@ -18,6 +18,7 @@ let jumpHeight = -15;
 let maxJumpHeight = window.innerHeight / 2; 
 let isJumping = false;
 let gameStarted = false;
+let countdownClicked = false;  // 标记是否在倒计时期间点击屏幕
 let obstacleX = 300;
 let obstacleY = 150;
 let horizontalSpeed = 5; // 小球水平速度
@@ -39,11 +40,13 @@ function startCountdown() {
         } else {
             clearInterval(countdownInterval);
             countdownElement.style.display = 'none'; // 隐藏倒计时
-            gameStarted = true;
-            if (!isJumping) {
-                // 如果倒计时结束时玩家还没有跳跃，游戏结束
-                alert('Game Over! 犹豫就是死亡');
+
+            if (!countdownClicked) {
+                // 如果倒计时结束时没有点击屏幕，游戏结束
+                alert('不想跳就别跳了');
                 resetGame();
+            } else {
+                gameStarted = true; // 游戏正式开始
             }
         }
     }, 1000);
@@ -96,7 +99,9 @@ function moveObstacle() {
 
 // 让小球跳跃
 function jump() {
-    if (!gameStarted) return; // 游戏未开始时无法跳跃
+    if (countdown > 0) {  // 倒计时期间可以跳跃
+        countdownClicked = true; // 标记倒计时期间已经点击了屏幕
+    }
 
     if (!isJumping) {  // 只有当小球不在跳跃时才允许跳跃
         ballVelocityY = jumpHeight;  // 跳跃的初始速度，固定高度跳跃
@@ -132,6 +137,7 @@ function resetGame() {
     ballX = 0;
     ballY = window.innerHeight - 30; 
     ballVelocityY = 0;
+    countdownClicked = false; // 重置点击标记
     ball.style.left = ballX + 'px';
     ball.style.top = ballY + 'px';
     gameStarted = false; // 重置游戏状态
