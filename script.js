@@ -5,10 +5,11 @@ let lives = 5;
 
 // 设置小球和障碍物的初始位置
 let ballX = 0;  // 小球从左边开始
-let ballY = window.innerHeight / 2 - 15;  // 小球初始Y位置
+let ballY = window.innerHeight - 30;  // 小球初始位置在地面上
 let ballVelocityY = 0; // 小球垂直方向速度
 let gravity = 0.5;  // 模拟重力效果
-let bounceFactor = 0.7; // 碰到地面时的反弹系数
+let jumpHeight = -12; // 跳跃的初始速度（固定高度跳跃）
+let maxJumpHeight = window.innerHeight / 2; // 最大跳跃高度
 let isJumping = false;
 
 let obstacleX = 300; // 障碍物初始位置
@@ -27,14 +28,22 @@ function moveBall() {
         ballX = 0; // 当小球到达右边边缘时回到左边
     }
 
-    // 更新小球的Y轴位置，受重力影响
-    ballVelocityY += gravity; // 每帧加上重力
-    ballY += ballVelocityY;   // 根据速度更新Y位置
+    // 如果小球在跳跃，受重力影响下落
+    if (isJumping) {
+        ballVelocityY += gravity; // 每帧加上重力
+        ballY += ballVelocityY;   // 根据速度更新Y位置
 
-    // 如果小球落到地面，反弹
-    if (ballY >= window.innerHeight - 30) { // 确保小球不会穿过地面
-        ballY = window.innerHeight - 30; // 确保小球位于地面
-        ballVelocityY = -ballVelocityY * bounceFactor; // 反弹，并根据反弹系数降低速度
+        // 检查是否达到最大跳跃高度
+        if (ballY <= maxJumpHeight) {
+            ballVelocityY = 0;  // 当达到最大高度时，小球开始下落
+        }
+
+        // 如果小球落到地面，停止跳跃
+        if (ballY >= window.innerHeight - 30) {
+            ballY = window.innerHeight - 30; // 确保小球停在地面上
+            ballVelocityY = 0;
+            isJumping = false; // 跳跃结束
+        }
     }
 
     ball.style.left = ballX + 'px';
@@ -55,7 +64,7 @@ function moveObstacle() {
 // 让小球跳跃
 function jump() {
     if (!isJumping) {  // 只有当小球不在跳跃时才允许跳跃
-        ballVelocityY = -10;  // 设置一个初始的向上的速度，负值表示向上跳
+        ballVelocityY = jumpHeight;  // 跳跃的初始速度，固定高度跳跃
         isJumping = true;     // 标记小球处于跳跃状态
     }
 }
@@ -89,7 +98,7 @@ function resetGame() {
     lives = 5;
     livesElement.innerText = 'Lives: ' + lives;
     ballX = 0;
-    ballY = window.innerHeight / 2 - 15;
+    ballY = window.innerHeight - 30; // 将小球重置在地面
     ballVelocityY = 0;
     ball.style.left = ballX + 'px';
     ball.style.top = ballY + 'px';
