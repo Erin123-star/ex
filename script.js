@@ -5,9 +5,9 @@ let lives = 5;
 
 // 设置小球和障碍物的初始位置
 let ballX = 0;  // 小球从左边开始
-let ballY = window.innerHeight / 2 - 15;  // 小球初始Y
+let ballY = window.innerHeight / 2 - 15;  // 小球初始Y位置
 let ballVelocityY = 0; // 小球垂直方向速度
-let gravity = 0.5;  // G
+let gravity = 0.5;  // 模拟重力效果
 let isJumping = false;
 
 let obstacleX = 300; // 障碍物初始位置
@@ -56,4 +56,53 @@ function moveObstacle() {
 
 // 让小球跳跃
 function jump() {
-    if (!isJumping) {  // 只有当小球不在跳跃时才允许
+    if (!isJumping) {  // 只有当小球不在跳跃时才允许跳跃
+        ballVelocityY = -10;  // 设置一个初始的向上的速度，负值表示向上跳
+        isJumping = true;     // 标记小球处于跳跃状态
+    }
+}
+
+// 检查小球和障碍物是否碰撞
+function checkCollision() {
+    let ballRect = ball.getBoundingClientRect();
+    let obstacleRect = obstacle.getBoundingClientRect();
+
+    // 检查小球和障碍物是否重叠
+    if (
+        ballRect.x < obstacleRect.x + obstacleRect.width &&
+        ballRect.x + ballRect.width > obstacleRect.x &&
+        ballRect.y < obstacleRect.y + obstacleRect.height &&
+        ballRect.y + ballRect.height > obstacleRect.y
+    ) {
+        // 碰到障碍物，掉一格血
+        lives -= 1;
+        livesElement.innerText = 'Lives: ' + lives;
+
+        // 如果生命值为0，游戏结束
+        if (lives === 0) {
+            alert('Game Over!');
+            resetGame();
+        }
+    }
+}
+
+// 重置游戏
+function resetGame() {
+    lives = 5;
+    livesElement.innerText = 'Lives: ' + lives;
+    ballX = 0;
+    ballY = window.innerHeight / 2 - 15;
+    ballVelocityY = 0;
+    ball.style.left = ballX + 'px';
+    ball.style.top = ballY + 'px';
+}
+
+// 监听屏幕点击事件，让小球跳跃
+document.addEventListener('touchstart', jump);
+
+// 设置定时器让小球和障碍物定期移动
+setInterval(moveBall, 50); // 小球每50毫秒移动一次
+setInterval(moveObstacle, 2000); // 每2秒障碍物随机移动一次
+
+
+
