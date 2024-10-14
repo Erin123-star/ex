@@ -8,6 +8,7 @@ let ballX = 0;  // 小球从左边开始
 let ballY = window.innerHeight / 2 - 15;  // 小球初始Y位置
 let ballVelocityY = 0; // 小球垂直方向速度
 let gravity = 0.5;  // 模拟重力效果
+let bounceFactor = 0.7; // 碰到地面时的反弹系数
 let isJumping = false;
 
 let obstacleX = 300; // 障碍物初始位置
@@ -26,17 +27,14 @@ function moveBall() {
         ballX = 0; // 当小球到达右边边缘时回到左边
     }
 
-    // 如果小球处于跳跃状态，更新其垂直位置
-    if (isJumping) {
-        ballVelocityY += gravity; // 每帧加上重力
-        ballY += ballVelocityY;   // 根据速度更新Y位置
+    // 更新小球的Y轴位置，受重力影响
+    ballVelocityY += gravity; // 每帧加上重力
+    ballY += ballVelocityY;   // 根据速度更新Y位置
 
-        // 如果小球落到地面（即下边界），停止跳跃
-        if (ballY >= window.innerHeight / 2 - 15) {
-            ballY = window.innerHeight / 2 - 15; // 重置到初始位置
-            ballVelocityY = 0;
-            isJumping = false; // 跳跃结束
-        }
+    // 如果小球落到地面，反弹
+    if (ballY >= window.innerHeight - 30) { // 确保小球不会穿过地面
+        ballY = window.innerHeight - 30; // 确保小球位于地面
+        ballVelocityY = -ballVelocityY * bounceFactor; // 反弹，并根据反弹系数降低速度
     }
 
     ball.style.left = ballX + 'px';
@@ -44,7 +42,6 @@ function moveBall() {
 
     checkCollision();
 }
-
 
 // 障碍物随机移动
 function moveObstacle() {
@@ -54,8 +51,6 @@ function moveObstacle() {
     obstacle.style.left = obstacleX + 'px';
     obstacle.style.top = obstacleY + 'px';
 }
-
-
 
 // 让小球跳跃
 function jump() {
@@ -106,6 +101,3 @@ document.addEventListener('touchstart', jump);
 // 设置定时器让小球和障碍物定期移动
 setInterval(moveBall, 50); // 小球每50毫秒移动一次
 setInterval(moveObstacle, 1000); // 每1秒障碍物随机移动一次
-
-
-
