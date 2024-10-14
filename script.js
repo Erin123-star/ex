@@ -42,7 +42,7 @@ function startCountdown() {
             gameStarted = true;
             if (!isJumping) {
                 // 如果倒计时结束时玩家还没有跳跃，游戏结束
-                alert('Game Over! You didn\'t jump!');
+                alert('Game Over! 犹豫就是死亡');
                 resetGame();
             }
         }
@@ -119,7 +119,7 @@ function checkCollision() {
         livesElement.innerText = 'Lives: ' + lives;
 
         if (lives === 0) {
-            alert('Game Over!');
+            alert('菜就多练!');
             resetGame();
         }
     }
